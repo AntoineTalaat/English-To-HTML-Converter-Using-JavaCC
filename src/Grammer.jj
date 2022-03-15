@@ -1,0 +1,203 @@
+PARSER_BEGIN(Converter)
+
+public class Converter {
+    public static void main(String arg[]) throws java.text.ParseException{
+        Converter obj=new Converter(System.in);
+        try {
+            obj.Create();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+ }
+
+PARSER_END(Converter)
+
+SKIP :
+{
+  " "
+| "\r"
+| "\t"
+}
+
+TOKEN[IGNORE_CASE] : {
+  < ALPHANUMERIC : ["0"-"9"] | ["a"-"z"]| ["A"-"Z"] | "/" | ":" | "." >
+  |<QUOTE: "\"">
+  |<ADD : "add">
+  |<#WITH: "with">
+  |<WITHLINK: <WITH> " link">
+  |<WITHTEXT: <WITH> " text">
+  |<WITHSOURCE: <WITH> " source">
+  |<WITHCOLOR: <WITH> " color">
+  |<WITHFONT: <WITH> " font">
+  |<TEXT: "text">
+  |<COLOR:"color">
+  |<FONT:"font">
+  |<LINK:"link">
+  |<PARA:"paragraph">
+  |<HEAD:"heading">
+  |<IMAGE:"image">
+  |<SOURCE:"source">
+  |<NULL:"">
+  |<AND:"and">
+}
+
+
+
+
+void Create():
+{ String res="";}{
+    <ADD> res=element() { System.out.println(res);}
+}
+
+String element():
+{ String tag="";
+  String details="";}
+{
+    details = img() {
+                return "<img"+details+"></img>"; }
+    |details = para()   {
+                 return "<p" + details + "/p>"   ;}
+    |details = header() {
+            return "<h1" + details + "/h1>";}
+    // or url
+}
+
+String img():
+{ String l;}
+{
+    <IMAGE> <WITHSOURCE> <QUOTE> l=sentence(){ return l;}
+}
+
+String para():
+{String text ;
+String[] arr;
+    }
+{
+    <PARA> text=decoratedTxt() {
+                                                 if(text.contains("<<text>>")){
+                                                         arr=text.split("<<text>>");
+                                                         return " " + arr[0] + ">" + arr[1] + "<" ;
+                                                     }else{
+                                                         return text+"><";
+                                                     }
+                                            }
+}
+
+String header():
+{String text;
+    String[] arr;}
+{
+    <HEAD> text=decoratedTxt(){
+
+                    if(text.contains("<<text>>")){
+                            arr=text.split("<<text>>");
+                            return " " + arr[0] + ">" + arr[1] + "<" ;
+                        }else{
+                            return text+"><";
+                        }
+                    }
+}
+
+//void url():
+//{}
+//{
+//    <LINK> decoratedURL()
+//}
+
+
+String sentence():
+{
+    Token t;
+    String s="";
+    String rs=null;
+ }
+{
+    t= <ALPHANUMERIC> [rs = sentence()] {
+                                          if (rs !=null)
+                                              s = t.image + rs;
+                                          else s=t.image;}
+    [<QUOTE>] {
+                 return s;}
+}
+
+
+
+
+String decoratedTxt():
+{String res="";
+ String temp;
+ String[] arr;
+ String temp2;
+ String[] arr2;
+ String style;
+
+ }
+{
+    temp=minimalDecoratedTxt() {res= temp;}
+    (
+        [<AND> temp2=decoratedTxt()  {
+                                        if(temp.contains("style=") && temp2.contains("style=")) {
+                                            arr=temp.split("style=\"");
+                                            arr2=temp2.split("style=\"");
+                                            style= "style=\"" + arr[1].split("\"")[0]+ " " +arr2[1].split("\"")[0];
+                                            res = style;
+                                        } else if(temp.contains("style=") || temp2.contains("style=")){
+                                            style=(temp.contains("style=")?temp+temp2:temp2+temp);
+                                            res = style;
+                                        } else {
+                                            //both are texts
+                                            arr = temp.split("<<text>>");
+                                            res= temp2 + arr[1] ;
+                                        }
+            }
+            ]
+    ){ return res;}
+
+
+}
+
+
+String minimalDecoratedTxt():
+{String temp="";}{
+     temp = text(){return "<<text>>"+temp ;}
+    |temp =font(){return "style=\"" + temp + "\"";}
+    |temp=color(){return "style=\"" + temp + "\"";}
+}
+
+
+//void minmalDecoratedURL():
+//{}
+//{
+//    (
+//      link()
+//     | text()
+//     | color()
+//     )
+//}
+
+String text():
+{ String t;}
+{
+    <WITHTEXT> <QUOTE> t=sentence(){
+            System.out.println(t);
+            return t;}
+}
+
+String color():
+{    String c;}
+{
+    <WITHCOLOR>  <QUOTE> c=sentence() { return "color:" +c + ";"; }
+}
+
+String font():
+{    String f; }
+{
+    <WITHFONT>  <QUOTE> f=sentence(){ return "font-family:"+f+";";}
+}
+
+//String link():
+//{   String l;}
+//{
+//    <WITHLINK> <QUOTE> l=sentence(){ return "src=" + "\"" + l + "\""  + ";";}
+//}
