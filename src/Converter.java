@@ -145,7 +145,7 @@ System.out.println("temp1"+temp);
                                                                        arr2=temp2.split("style=\"");
                                                                        style= "style=\"" + arr[1].split("\"")[0]+ " " +arr2[1].split("\"")[0];
                                                                        res = style;
-                                                                   }  else if(temp.contains("href=") || temp2.contains("href=")){
+                                                                   }else if(temp.contains("href=") || temp2.contains("href=")){
                                                                        style=(temp.contains("href=")?temp+temp2:temp2+temp);
                                                                        res = style;
                                                                    }else {
@@ -183,7 +183,10 @@ System.out.println("temp2"+temp2);
                                             arr2=temp2.split("style=\"");
                                             style= "style=\"" + arr[1].split("\"")[0]+ " " +arr2[1].split("\"")[0];
                                             res = style;
-                                        } else if(temp.contains("style=") || temp2.contains("style=")){
+                                        }else if(temp.contains("href=") || temp2.contains("href=")){
+                                                                                                                style=(temp.contains("href=")?temp+temp2:temp2+temp);
+                                                                                                                res = style;}
+                                        else if(temp.contains("style=") || temp2.contains("style=")){
                                             style=(temp.contains("style=")?temp+temp2:temp2+temp);
                                             res = style;
                                         }else {
