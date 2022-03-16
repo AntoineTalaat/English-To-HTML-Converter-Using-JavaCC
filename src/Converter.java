@@ -171,9 +171,14 @@ System.out.println("temp1"+temp);
                            }
       break;
       }
+    case EOL:{
+      jj_consume_token(EOL);
+      break;
+      }
     default:
       jj_la1[3] = jj_gen;
-      ;
+      jj_consume_token(-1);
+      throw new ParseException();
     }
 System.out.println(res);
                             {if ("" != null) return res;}
@@ -209,9 +214,14 @@ System.out.println("temp2"+temp2);
                                         }
       break;
       }
+    case EOL:{
+      jj_consume_token(EOL);
+      break;
+      }
     default:
       jj_la1[4] = jj_gen;
-      ;
+      jj_consume_token(-1);
+      throw new ParseException();
     }
 System.out.println(res);
  {if ("" != null) return res;}
@@ -322,7 +332,7 @@ System.out.println(t);
 	   jj_la1_init_0();
 	}
 	private static void jj_la1_init_0() {
-	   jj_la1_0 = new int[] {0xf0000,0x10,0x20,0x400000,0x400000,0x1a00,0x1b00,};
+	   jj_la1_0 = new int[] {0xf0000,0x10,0x20,0xc00000,0xc00000,0x1a00,0x1b00,};
 	}
 
   /** Constructor with InputStream. */

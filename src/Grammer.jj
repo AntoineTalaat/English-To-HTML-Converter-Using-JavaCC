@@ -156,7 +156,7 @@ String decoratedURL():
 }
 {
     temp=minimalDecoratedURL() {res= temp;} (
-                    [<AND> temp2=decoratedURL()  {
+                    (<AND> temp2=decoratedURL()  {
                            System.out.println("temp1"+temp);
                            System.out.println("temp2"+temp2);
                            if(temp.contains("style=") && temp2.contains("style=")) {
@@ -180,7 +180,7 @@ String decoratedURL():
                                res= temp2 + arr[1] ;
                            }
                                        }
-                                       ]
+                                       )|<EOL>
                                ){ System.out.println(res);
                             return res;}
 }
@@ -199,7 +199,7 @@ String decoratedTxt():
 {
     temp=minimalDecoratedTxt() {res= temp;}
     (
-        [<AND> temp2=decoratedTxt()  {
+       ( <AND> temp2=decoratedTxt()  {
 System.out.println("temp1"+temp);
 System.out.println("temp2"+temp2);
                                         if(temp.contains("style=") && temp2.contains("style=")) {
@@ -216,7 +216,7 @@ System.out.println("temp2"+temp2);
                                             res= temp2 + arr[1] ;
                                         }
             }
-            ]
+            )|<EOL>
     ){ System.out.println(res);
  return res;}
 }
