@@ -71,18 +71,26 @@ String element():
 String link():
 {String text ;
 String[] arr;
+String res="";
     }
 {
     <LINK>  text=decoratedURL() {
-                                                            System.out.println(text);
-                                                           if(text.contains("<<text>>")){
-                                                                   arr=text.split("<<text>>");
-                                                                   return " " + arr[0] + ">" + arr[1] + "<" ;
-                                                               }else{
-                                                                   return text+"><";
-                                                               }
-                                                      }
+                                    System.out.println(text);
+                                    res=text;
+                                   if(text.contains("<<text>>")){
+                                           arr=text.split("<<text>>");
+                                           res= " " + arr[0] + ">" + arr[1] + "<" ;
+                                       }else{
+                                           res= text+"><";
+                                       }
+
+                                   if(res.contains("<<href=>>")){
+                                       arr=res.split("<<href=>>");
+                                       res= "href=\""+arr[1]+"\"" + " " +arr[0]+arr[2];
+                              }
+                                   return res;
           }
+   }
 
 String img():
 { String l;}
@@ -147,23 +155,30 @@ String decoratedURL():
   String style;
 }
 {
-    temp=minimalDecoratedTxt() {res= temp;} (
-                    [<AND> temp2=decoratedTxt()  {
+    temp=minimalDecoratedURL() {res= temp;} (
+                    [<AND> temp2=decoratedURL()  {
                            System.out.println("temp1"+temp);
                            System.out.println("temp2"+temp2);
-                                                                   if(temp.contains("style=") && temp2.contains("style=")) {
-                                                                       arr=temp.split("style=\"");
-                                                                       arr2=temp2.split("style=\"");
-                                                                       style= "style=\"" + arr[1].split("\"")[0]+ " " +arr2[1].split("\"")[0];
-                                                                       res = style;
-                                                                   }else if(temp.contains("href=") || temp2.contains("href=")){
-                                                                       style=(temp.contains("href=")?temp+temp2:temp2+temp);
-                                                                       res = style;
-                                                                   }else {
-                                                                       //both are texts
-                                                                       arr = temp.split("<<text>>");
-                                                                       res= temp2 + arr[1] ;
-                                                                   }
+                           if(temp.contains("style=") && temp2.contains("style=")) {
+                               arr=temp.split("style=\"");
+                               arr2=temp2.split("style=\"");
+                               style= "style=\"" + arr[1].split("\"")[0]+ " " +arr2[1].split("\"")[0];
+                               res = style;
+                           }else if(temp.contains("style=") || temp2.contains("style=")){
+                               style=(temp.contains("style=")?temp+temp2:temp2+temp);
+                               res = style;
+                           }else if(temp.contains("<<href=>>") || temp2.contains("<<href=>>")){
+                               arr = temp.split("<<href=>>");
+                               arr2=temp2.split("<<href=>>");
+                               style=(temp.contains("<<href=>>")?
+                               "<<href=>>"+temp.split("<<href=>>")[1]+"<<href=>> " + temp2:
+                               "<<href=>>"+temp2.split("<<href=>>")[1]+"<<href=>> " + temp);
+                               res = style;
+                           }else {
+                               //both are texts
+                               arr = temp.split("<<text>>");
+                               res= temp2 + arr[1] ;
+                           }
                                        }
                                        ]
                                ){ System.out.println(res);
@@ -212,8 +227,18 @@ String minimalDecoratedTxt():
      temp = text(){return "<<text>>"+temp ;}
     |temp =font(){return "style=\"" + temp + "\"";}
     |temp=color(){return "style=\"" + temp + "\"";}
-    |temp=url() {return "href=\"" + temp + "\"";}
 }
+
+
+String minimalDecoratedURL():
+{String temp="";}{
+     temp = text(){return "<<text>>"+temp ;}
+    |temp =font(){return "style=\"" + temp + "\"";}
+    |temp=color(){return "style=\"" + temp + "\"";}
+    |temp=url() {return "<<href=>>" + temp + "<<href=>>";}
+}
+
+
 
 
 String text():

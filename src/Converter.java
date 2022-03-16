@@ -50,15 +50,23 @@ System.out.println(res);
 
   static final public String link() throws ParseException {String text ;
 String[] arr;
+String res="";
     jj_consume_token(LINK);
     text = decoratedURL();
 System.out.println(text);
-                                                           if(text.contains("<<text>>")){
-                                                                   arr=text.split("<<text>>");
-                                                                   {if ("" != null) return " " + arr[0] + ">" + arr[1] + "<" ;}
-                                                               }else{
-                                                                   {if ("" != null) return text+"><";}
-                                                               }
+                                    res=text;
+                                   if(text.contains("<<text>>")){
+                                           arr=text.split("<<text>>");
+                                           res= " " + arr[0] + ">" + arr[1] + "<" ;
+                                       }else{
+                                           res= text+"><";
+                                       }
+
+                                   if(res.contains("<<href=>>")){
+                                       arr=res.split("<<href=>>");
+                                       res= "href=\""+arr[1]+"\"" + " " +arr[0]+arr[2];
+                              }
+                                   {if ("" != null) return res;}
     throw new Error("Missing return statement in function");
 }
 
@@ -133,27 +141,34 @@ if (rs !=null)
   String temp2;
   String[] arr2;
   String style;
-    temp = minimalDecoratedTxt();
+    temp = minimalDecoratedURL();
 res= temp;
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case AND:{
       jj_consume_token(AND);
-      temp2 = decoratedTxt();
+      temp2 = decoratedURL();
 System.out.println("temp1"+temp);
                            System.out.println("temp2"+temp2);
-                                                                   if(temp.contains("style=") && temp2.contains("style=")) {
-                                                                       arr=temp.split("style=\"");
-                                                                       arr2=temp2.split("style=\"");
-                                                                       style= "style=\"" + arr[1].split("\"")[0]+ " " +arr2[1].split("\"")[0];
-                                                                       res = style;
-                                                                   }else if(temp.contains("href=") || temp2.contains("href=")){
-                                                                       style=(temp.contains("href=")?temp+temp2:temp2+temp);
-                                                                       res = style;
-                                                                   }else {
-                                                                       //both are texts
-                                                                       arr = temp.split("<<text>>");
-                                                                       res= temp2 + arr[1] ;
-                                                                   }
+                           if(temp.contains("style=") && temp2.contains("style=")) {
+                               arr=temp.split("style=\"");
+                               arr2=temp2.split("style=\"");
+                               style= "style=\"" + arr[1].split("\"")[0]+ " " +arr2[1].split("\"")[0];
+                               res = style;
+                           }else if(temp.contains("style=") || temp2.contains("style=")){
+                               style=(temp.contains("style=")?temp+temp2:temp2+temp);
+                               res = style;
+                           }else if(temp.contains("<<href=>>") || temp2.contains("<<href=>>")){
+                               arr = temp.split("<<href=>>");
+                               arr2=temp2.split("<<href=>>");
+                               style=(temp.contains("<<href=>>")?
+                               "<<href=>>"+temp.split("<<href=>>")[1]+"<<href=>> " + temp2:
+                               "<<href=>>"+temp2.split("<<href=>>")[1]+"<<href=>> " + temp);
+                               res = style;
+                           }else {
+                               //both are texts
+                               arr = temp.split("<<text>>");
+                               res= temp2 + arr[1] ;
+                           }
       break;
       }
     default:
@@ -220,13 +235,38 @@ System.out.println(res);
 {if ("" != null) return "style=\"" + temp + "\"";}
       break;
       }
+    default:
+      jj_la1[5] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+    throw new Error("Missing return statement in function");
+}
+
+  static final public String minimalDecoratedURL() throws ParseException {String temp="";
+    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+    case WITHTEXT:{
+      temp = text();
+{if ("" != null) return "<<text>>"+temp ;}
+      break;
+      }
+    case WITHFONT:{
+      temp = font();
+{if ("" != null) return "style=\"" + temp + "\"";}
+      break;
+      }
+    case WITHCOLOR:{
+      temp = color();
+{if ("" != null) return "style=\"" + temp + "\"";}
+      break;
+      }
     case WITHLINK:{
       temp = url();
-{if ("" != null) return "href=\"" + temp + "\"";}
+{if ("" != null) return "<<href=>>" + temp + "<<href=>>";}
       break;
       }
     default:
-      jj_la1[5] = jj_gen;
+      jj_la1[6] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -276,13 +316,13 @@ System.out.println(t);
   static public Token jj_nt;
   static private int jj_ntk;
   static private int jj_gen;
-  static final private int[] jj_la1 = new int[6];
+  static final private int[] jj_la1 = new int[7];
   static private int[] jj_la1_0;
   static {
 	   jj_la1_init_0();
 	}
 	private static void jj_la1_init_0() {
-	   jj_la1_0 = new int[] {0xf0000,0x10,0x20,0x400000,0x400000,0x1b00,};
+	   jj_la1_0 = new int[] {0xf0000,0x10,0x20,0x400000,0x400000,0x1a00,0x1b00,};
 	}
 
   /** Constructor with InputStream. */
@@ -303,7 +343,7 @@ System.out.println(t);
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 6; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < 7; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -317,7 +357,7 @@ System.out.println(t);
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 6; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < 7; i++) jj_la1[i] = -1;
   }
 
   /** Constructor. */
@@ -334,7 +374,7 @@ System.out.println(t);
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 6; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < 7; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -352,7 +392,7 @@ System.out.println(t);
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 6; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < 7; i++) jj_la1[i] = -1;
   }
 
   /** Constructor with generated Token Manager. */
@@ -368,7 +408,7 @@ System.out.println(t);
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 6; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < 7; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -377,7 +417,7 @@ System.out.println(t);
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 6; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < 7; i++) jj_la1[i] = -1;
   }
 
   static private Token jj_consume_token(int kind) throws ParseException {
@@ -433,7 +473,7 @@ System.out.println(t);
 	   la1tokens[jj_kind] = true;
 	   jj_kind = -1;
 	 }
-	 for (int i = 0; i < 6; i++) {
+	 for (int i = 0; i < 7; i++) {
 	   if (jj_la1[i] == jj_gen) {
 		 for (int j = 0; j < 32; j++) {
 		   if ((jj_la1_0[i] & (1<<j)) != 0) {
