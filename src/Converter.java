@@ -21,7 +21,7 @@ System.out.println(res);
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case IMAGE:{
       details = img();
-{if ("" != null) return "<img"+details+"></img>";}
+{if ("" != null) return "<img src="+details+" />";}
       break;
       }
     case PARA:{
@@ -31,8 +31,12 @@ System.out.println(res);
       }
     case HEAD:{
       details = header();
-System.out.println(details);
-            {if ("" != null) return "<h1" + details + "/h1>";}
+{if ("" != null) return "<h1" + details + "/h1>";}
+      break;
+      }
+    case LINK:{
+      details = link();
+{if ("" != null) return "<a "+details+"/a>";}
       break;
       }
     default:
@@ -40,6 +44,20 @@ System.out.println(details);
       jj_consume_token(-1);
       throw new ParseException();
     }
+    throw new Error("Missing return statement in function");
+}
+
+  static final public String link() throws ParseException {String text ;
+String[] arr;
+    jj_consume_token(LINK);
+    text = decoratedURL();
+System.out.println(text);
+                                                           if(text.contains("<<text>>")){
+                                                                   arr=text.split("<<text>>");
+                                                                   {if ("" != null) return " " + arr[0] + ">" + arr[1] + "<" ;}
+                                                               }else{
+                                                                   {if ("" != null) return text+"><";}
+                                                               }
     throw new Error("Missing return statement in function");
 }
 
@@ -56,7 +74,7 @@ System.out.println(details);
 String[] arr;
     jj_consume_token(PARA);
     text = decoratedTxt();
-System.out.println("IN para");
+System.out.println(text);
                                                  if(text.contains("<<text>>")){
                                                          arr=text.split("<<text>>");
                                                          {if ("" != null) return " " + arr[0] + ">" + arr[1] + "<" ;}
@@ -70,8 +88,7 @@ System.out.println("IN para");
     String[] arr;
     jj_consume_token(HEAD);
     text = decoratedTxt();
-System.out.println("head>>"+text);
-                    if(text.contains("<<text>>")){
+if(text.contains("<<text>>")){
                             arr=text.split("<<text>>");
                             {if ("" != null) return " " + arr[0] + ">" + arr[1] + "<" ;}
                         }else{
@@ -80,14 +97,7 @@ System.out.println("head>>"+text);
     throw new Error("Missing return statement in function");
 }
 
-//void url():
-//{}
-//{
-//    <LINK> decoratedURL()
-//}
-  static final public 
-
-String sentence() throws ParseException {Token t;
+  static final public String sentence() throws ParseException {Token t;
     String s="";
     String rs=null;
     t = jj_consume_token(ALPHANUMERIC);
@@ -116,6 +126,44 @@ if (rs !=null)
     throw new Error("Missing return statement in function");
 }
 
+  static final public String decoratedURL() throws ParseException {String res="";
+  String temp;
+  String[] arr;
+  String temp2;
+  String[] arr2;
+  String style;
+    temp = minimalDecoratedTxt();
+res= temp;
+    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+    case AND:{
+      jj_consume_token(AND);
+      temp2 = decoratedTxt();
+System.out.println("temp1"+temp);
+                           System.out.println("temp2"+temp2);
+                                                                   if(temp.contains("style=") && temp2.contains("style=")) {
+                                                                       arr=temp.split("style=\"");
+                                                                       arr2=temp2.split("style=\"");
+                                                                       style= "style=\"" + arr[1].split("\"")[0]+ " " +arr2[1].split("\"")[0];
+                                                                       res = style;
+                                                                   }else if(temp.contains("href=") || temp2.contains("href=")){
+                                                                       style=(temp.contains("href=")?temp+temp2:temp2+temp);
+                                                                       res = style;
+                                                                   }else {
+                                                                       //both are texts
+                                                                       arr = temp.split("<<text>>");
+                                                                       res= temp2 + arr[1] ;
+                                                                   }
+      break;
+      }
+    default:
+      jj_la1[3] = jj_gen;
+      ;
+    }
+System.out.println(res);
+                            {if ("" != null) return res;}
+    throw new Error("Missing return statement in function");
+}
+
   static final public String decoratedTxt() throws ParseException {String res="";
  String temp;
  String[] arr;
@@ -128,15 +176,20 @@ res= temp;
     case AND:{
       jj_consume_token(AND);
       temp2 = decoratedTxt();
-if(temp.contains("style=") && temp2.contains("style=")) {
+System.out.println("temp1"+temp);
+System.out.println("temp2"+temp2);
+                                        if(temp.contains("style=") && temp2.contains("style=")) {
                                             arr=temp.split("style=\"");
                                             arr2=temp2.split("style=\"");
                                             style= "style=\"" + arr[1].split("\"")[0]+ " " +arr2[1].split("\"")[0];
                                             res = style;
-                                        } else if(temp.contains("style=") || temp2.contains("style=")){
+                                        }else if(temp.contains("href=") || temp2.contains("href=")){
+                                                                                                                style=(temp.contains("href=")?temp+temp2:temp2+temp);
+                                                                                                                res = style;}
+                                        else if(temp.contains("style=") || temp2.contains("style=")){
                                             style=(temp.contains("style=")?temp+temp2:temp2+temp);
                                             res = style;
-                                        } else {
+                                        }else {
                                             //both are texts
                                             arr = temp.split("<<text>>");
                                             res= temp2 + arr[1] ;
@@ -144,10 +197,11 @@ if(temp.contains("style=") && temp2.contains("style=")) {
       break;
       }
     default:
-      jj_la1[3] = jj_gen;
+      jj_la1[4] = jj_gen;
       ;
     }
-{if ("" != null) return res;}
+System.out.println(res);
+ {if ("" != null) return res;}
     throw new Error("Missing return statement in function");
 }
 
@@ -168,26 +222,9 @@ if(temp.contains("style=") && temp2.contains("style=")) {
 {if ("" != null) return "style=\"" + temp + "\"";}
       break;
       }
-    default:
-      jj_la1[4] = jj_gen;
-      jj_consume_token(-1);
-      throw new ParseException();
-    }
-    throw new Error("Missing return statement in function");
-}
-
-  static final public void minmalDecoratedURL() throws ParseException {
-    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case WITHLINK:{
-      link();
-      break;
-      }
-    case WITHTEXT:{
-      text();
-      break;
-      }
-    case WITHCOLOR:{
-      color();
+      temp = url();
+{if ("" != null) return "href=\"" + temp + "\"";}
       break;
       }
     default:
@@ -195,6 +232,7 @@ if(temp.contains("style=") && temp2.contains("style=")) {
       jj_consume_token(-1);
       throw new ParseException();
     }
+    throw new Error("Missing return statement in function");
 }
 
   static final public String text() throws ParseException {String t;
@@ -222,11 +260,11 @@ System.out.println(t);
     throw new Error("Missing return statement in function");
 }
 
-  static final public String link() throws ParseException {String l;
+  static final public String url() throws ParseException {String l;
     jj_consume_token(WITHLINK);
     jj_consume_token(QUOTE);
     l = sentence();
-{if ("" != null) return "src=" + "\"" + l + "\""  + ";";}
+{if ("" != null) return l;}
     throw new Error("Missing return statement in function");
 }
 
@@ -246,7 +284,7 @@ System.out.println(t);
 	   jj_la1_init_0();
 	}
 	private static void jj_la1_init_0() {
-	   jj_la1_0 = new int[] {0xe0000,0x10,0x20,0x400000,0x1a00,0xb00,};
+	   jj_la1_0 = new int[] {0xf0000,0x10,0x20,0x400000,0x400000,0x1b00,};
 	}
 
   /** Constructor with InputStream. */

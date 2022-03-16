@@ -21,7 +21,7 @@ SKIP :
 }
 
 TOKEN[IGNORE_CASE] : {
-  < ALPHANUMERIC : ["0"-"9"] | ["a"-"z"]| ["A"-"Z"] | "/" | ":" | "." >
+  < ALPHANUMERIC : ["0"-"9"] | ["a"-"z"]| ["A"-"Z"] | "/" | ":" | "." | "_" >
   |<QUOTE: "\"">
   |<ADD : "add">
   |<#WITH: "with">
@@ -55,13 +55,31 @@ String element():
   String details="";}
 {
     details = img() {
-                return "<img"+details+"></img>"; }
+                return "<img src="+details+" />"; }
     |details = para()   {
                  return "<p" + details + "/p>"   ;}
     |details = header() {
             return "<h1" + details + "/h1>";}
-    // or url
+    | details = link() {
+            return "<a "+details+"/a>";}
+
 }
+
+String link():
+{String text ;
+String[] arr;
+    }
+{
+    <LINK>  text=decoratedURL() {
+                                                            System.out.println(text);
+                                                           if(text.contains("<<text>>")){
+                                                                   arr=text.split("<<text>>");
+                                                                   return " " + arr[0] + ">" + arr[1] + "<" ;
+                                                               }else{
+                                                                   return text+"><";
+                                                               }
+                                                      }
+          }
 
 String img():
 { String l;}
@@ -75,6 +93,7 @@ String[] arr;
     }
 {
     <PARA> text=decoratedTxt() {
+                                                System.out.println(text);
                                                  if(text.contains("<<text>>")){
                                                          arr=text.split("<<text>>");
                                                          return " " + arr[0] + ">" + arr[1] + "<" ;
@@ -99,11 +118,6 @@ String header():
                     }
 }
 
-//void url():
-//{}
-//{
-//    <LINK> decoratedURL()
-//}
 
 
 String sentence():
@@ -121,6 +135,37 @@ String sentence():
                  return s;}
 }
 
+String decoratedURL():
+{String res="";
+  String temp;
+  String[] arr;
+  String temp2;
+  String[] arr2;
+  String style;
+}
+{
+    temp=minimalDecoratedTxt() {res= temp;} (
+                    [<AND> temp2=decoratedTxt()  {
+                           System.out.println("temp1"+temp);
+                           System.out.println("temp2"+temp2);
+                                                                   if(temp.contains("style=") && temp2.contains("style=")) {
+                                                                       arr=temp.split("style=\"");
+                                                                       arr2=temp2.split("style=\"");
+                                                                       style= "style=\"" + arr[1].split("\"")[0]+ " " +arr2[1].split("\"")[0];
+                                                                       res = style;
+                                                                   }  else if(temp.contains("href=") || temp2.contains("href=")){
+                                                                       style=(temp.contains("href=")?temp+temp2:temp2+temp);
+                                                                       res = style;
+                                                                   }else {
+                                                                       //both are texts
+                                                                       arr = temp.split("<<text>>");
+                                                                       res= temp2 + arr[1] ;
+                                                                   }
+                                       }
+                                       ]
+                               ){ System.out.println(res);
+                            return res;}
+}
 
 
 
@@ -137,6 +182,8 @@ String decoratedTxt():
     temp=minimalDecoratedTxt() {res= temp;}
     (
         [<AND> temp2=decoratedTxt()  {
+System.out.println("temp1"+temp);
+System.out.println("temp2"+temp2);
                                         if(temp.contains("style=") && temp2.contains("style=")) {
                                             arr=temp.split("style=\"");
                                             arr2=temp2.split("style=\"");
@@ -145,16 +192,15 @@ String decoratedTxt():
                                         } else if(temp.contains("style=") || temp2.contains("style=")){
                                             style=(temp.contains("style=")?temp+temp2:temp2+temp);
                                             res = style;
-                                        } else {
+                                        }else {
                                             //both are texts
                                             arr = temp.split("<<text>>");
                                             res= temp2 + arr[1] ;
                                         }
             }
             ]
-    ){ return res;}
-
-
+    ){ System.out.println(res);
+ return res;}
 }
 
 
@@ -163,18 +209,9 @@ String minimalDecoratedTxt():
      temp = text(){return "<<text>>"+temp ;}
     |temp =font(){return "style=\"" + temp + "\"";}
     |temp=color(){return "style=\"" + temp + "\"";}
+    |temp=url() {return "href=\"" + temp + "\"";}
 }
 
-
-//void minmalDecoratedURL():
-//{}
-//{
-//    (
-//      link()
-//     | text()
-//     | color()
-//     )
-//}
 
 String text():
 { String t;}
@@ -196,8 +233,8 @@ String font():
     <WITHFONT>  <QUOTE> f=sentence(){ return "font-family:"+f+";";}
 }
 
-//String link():
-//{   String l;}
-//{
-//    <WITHLINK> <QUOTE> l=sentence(){ return "src=" + "\"" + l + "\""  + ";";}
-//}
+String url():
+{    String l;}
+{
+    <WITHLINK> <QUOTE> l=sentence() {return l;}
+}
