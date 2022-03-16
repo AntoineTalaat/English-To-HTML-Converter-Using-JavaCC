@@ -1,15 +1,27 @@
+options
+{
+STATIC = false ;
+}
+
 PARSER_BEGIN(Converter)
 
 public class Converter {
-    public static void main(String arg[]) throws java.text.ParseException{
-        Converter obj=new Converter(System.in);
-        try {
-            obj.Create();
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        }
- }
+   public static void main(String arg[]) throws java.text.ParseException{
+
+       while(true){
+               Converter obj=new Converter(System.in);
+                                    try {
+                                        obj.Create();
+
+                                    }catch (ParseException e){
+                                        e.printStackTrace();
+                                       }
+       }
+
+                     }
+}
+
+
 
 PARSER_END(Converter)
 
@@ -18,6 +30,7 @@ SKIP :
   " "
 | "\r"
 | "\t"
+
 }
 
 TOKEN[IGNORE_CASE] : {
@@ -42,8 +55,6 @@ TOKEN[IGNORE_CASE] : {
   |<AND:"and">
   |<EOL:"\n">
 }
-
-
 
 
 void Create():
@@ -75,7 +86,7 @@ String res="";
     }
 {
     <LINK>  text=decoratedURL() {
-                                    System.out.println(text);
+                                   // System.out.println(text);
                                     res=text;
                                    if(text.contains("<<text>>")){
                                            arr=text.split("<<text>>");
@@ -104,7 +115,7 @@ String[] arr;
     }
 {
     <PARA> text=decoratedTxt() {
-                                                System.out.println(text);
+                                              //  System.out.println(text);
                                                  if(text.contains("<<text>>")){
                                                          arr=text.split("<<text>>");
                                                          return " " + arr[0] + ">" + arr[1] + "<" ;
@@ -157,8 +168,8 @@ String decoratedURL():
 {
     temp=minimalDecoratedURL() {res= temp;} (
                     [<AND> temp2=decoratedURL()  {
-                           System.out.println("temp1"+temp);
-                           System.out.println("temp2"+temp2);
+                         //  System.out.println("temp1"+temp);
+                          // System.out.println("temp2"+temp2);
                            if(temp.contains("style=") && temp2.contains("style=")) {
                                arr=temp.split("style=\"");
                                arr2=temp2.split("style=\"");
@@ -181,7 +192,7 @@ String decoratedURL():
                            }
                                        }
                                        ]
-                               ){ System.out.println(res);
+                               ){ //System.out.println(res);
                             return res;}
 }
 
@@ -200,8 +211,8 @@ String decoratedTxt():
     temp=minimalDecoratedTxt() {res= temp;}
     (
         [<AND> temp2=decoratedTxt()  {
-System.out.println("temp1"+temp);
-System.out.println("temp2"+temp2);
+//System.out.println("temp1"+temp);
+//System.out.println("temp2"+temp2);
                                         if(temp.contains("style=") && temp2.contains("style=")) {
                                             arr=temp.split("style=\"");
                                             arr2=temp2.split("style=\"");
@@ -217,7 +228,7 @@ System.out.println("temp2"+temp2);
                                         }
             }
             ]
-    ){ System.out.println(res);
+    ){ //System.out.println(res);
  return res;}
 }
 
@@ -245,7 +256,7 @@ String text():
 { String t;}
 {
     <WITHTEXT> <QUOTE> t=sentence(){
-            System.out.println(t);
+           // System.out.println(t);
             return t;}
 }
 
