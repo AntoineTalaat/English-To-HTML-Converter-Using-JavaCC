@@ -44,6 +44,7 @@ System.out.println(res);
       jj_consume_token(-1);
       throw new ParseException();
     }
+    jj_consume_token(EOL);
     throw new Error("Missing return statement in function");
 }
 
@@ -183,10 +184,7 @@ System.out.println("temp2"+temp2);
                                             arr2=temp2.split("style=\"");
                                             style= "style=\"" + arr[1].split("\"")[0]+ " " +arr2[1].split("\"")[0];
                                             res = style;
-                                        }else if(temp.contains("href=") || temp2.contains("href=")){
-                                                                                                                style=(temp.contains("href=")?temp+temp2:temp2+temp);
-                                                                                                                res = style;}
-                                        else if(temp.contains("style=") || temp2.contains("style=")){
+                                        } else if(temp.contains("style=") || temp2.contains("style=")){
                                             style=(temp.contains("style=")?temp+temp2:temp2+temp);
                                             res = style;
                                         }else {
@@ -430,7 +428,7 @@ System.out.println(t);
   /** Generate ParseException. */
   static public ParseException generateParseException() {
 	 jj_expentries.clear();
-	 boolean[] la1tokens = new boolean[23];
+	 boolean[] la1tokens = new boolean[24];
 	 if (jj_kind >= 0) {
 	   la1tokens[jj_kind] = true;
 	   jj_kind = -1;
@@ -444,7 +442,7 @@ System.out.println(t);
 		 }
 	   }
 	 }
-	 for (int i = 0; i < 23; i++) {
+	 for (int i = 0; i < 24; i++) {
 	   if (la1tokens[i]) {
 		 jj_expentry = new int[1];
 		 jj_expentry[0] = i;

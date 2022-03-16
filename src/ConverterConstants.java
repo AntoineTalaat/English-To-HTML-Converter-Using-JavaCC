@@ -46,6 +46,8 @@ public interface ConverterConstants {
   int NULL = 21;
   /** RegularExpression Id. */
   int AND = 22;
+  /** RegularExpression Id. */
+  int EOL = 23;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -75,6 +77,7 @@ public interface ConverterConstants {
     "\"source\"",
     "\"\"",
     "\"and\"",
+    "\"\\n\"",
   };
 
 }

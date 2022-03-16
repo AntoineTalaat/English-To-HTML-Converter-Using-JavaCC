@@ -40,6 +40,7 @@ TOKEN[IGNORE_CASE] : {
   |<SOURCE:"source">
   |<NULL:"">
   |<AND:"and">
+  |<EOL:"\n">
 }
 
 
@@ -48,20 +49,22 @@ TOKEN[IGNORE_CASE] : {
 void Create():
 { String res="";}{
     <ADD> res=element() { System.out.println(res);}
+
 }
 
 String element():
 { String tag="";
   String details="";}
 {
-    details = img() {
+    (details = img() {
                 return "<img src="+details+" />"; }
     |details = para()   {
                  return "<p" + details + "/p>"   ;}
     |details = header() {
             return "<h1" + details + "/h1>";}
     | details = link() {
-            return "<a "+details+"/a>";}
+            return "<a "+details+"/a>";})
+    <EOL>
 
 }
 
