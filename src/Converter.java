@@ -4,15 +4,18 @@ public class Converter implements ConverterConstants {
    public static void main(String arg[]) throws java.text.ParseException{
 
        while(true){
-               Converter obj=new Converter(System.in);
-                                    try {
-                                        obj.Create();
-                                    }catch (ParseException e){
-                                        e.printStackTrace();
-                                    }
+            tony();
        }
 
-                     }
+             }
+           static void tony (){
+             Converter obj=new Converter(System.in);
+                   try {
+                       obj.Create();
+                   }catch (ParseException e){
+                       e.printStackTrace();
+                   }
+             }
 
   final public void Create() throws ParseException {String res="";
     jj_consume_token(ADD);

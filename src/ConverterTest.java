@@ -1,16 +1,16 @@
-//import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Test;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.nio.charset.Charset;
-/*
+import static org.junit.jupiter.api.Assertions.*;
+
 class ConverterTest {
- @Test
+  Converter converter = new Converter();
+    @Test
+    void main() {
 
-  void Verification (){
-     String string = "ss";
-     InputStream inputStream = new ByteArrayInputStream(string.getBytes(Charset.forName("UTF-8")));
-     Converter obj = new Converter(inputStream);
+    }
 
- }
-}*/
+    @Test
+    void create() {
+        Converter.tony();
+    }
+}
