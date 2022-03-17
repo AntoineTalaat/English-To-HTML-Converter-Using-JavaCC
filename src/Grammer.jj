@@ -1,27 +1,44 @@
+
 options
 {
 STATIC = false ;
 }
 
 PARSER_BEGIN(Converter)
+import java.io.*;
+import java.io.InputStream;
+import java.util.*;
+import java.nio.*;
+import java.nio.charset.Charset;
 public class Converter {
+
    public static void main(String arg[]) throws java.text.ParseException{
-
-       while(true){
-            tony();
-       }
+       try{
+            File f = new File("input.txt");
+            Scanner reader = new Scanner(f);
+            while (reader.hasNextLine()) {
+                String data = reader.nextLine();
+                tony(data);
+            }
+       }catch (Exception e){}
 
              }
-           static void tony (){
-             Converter obj=new Converter(System.in);
-                   try {
-                       obj.Create();
-                   }catch (ParseException e){
-                       e.printStackTrace();
-                   }
-             }
+             static void tony (String input) throws Exception{
 
-}
+                                      // System.out.println(data);
+                                   InputStream inputStream = new ByteArrayInputStream(input.getBytes(Charset.forName("UTF-8")));
+                                  // System.out.println(inputStream);
+                                   Converter obj=new Converter(inputStream);
+                                   try {
+                                       obj.Create();
+                                   }catch (ParseException e){
+                                       e.printStackTrace();
+                                   }
+    }
+ }
+
+
+
 
 
 PARSER_END(Converter)
@@ -78,7 +95,7 @@ String element():
             return "<h1 " + details + "/h1>";}
     | details = link() {
             return "<a "+details+"/a>";})
-    <EOL>
+    (<EOL> | <EOF>)
 
 }
 
