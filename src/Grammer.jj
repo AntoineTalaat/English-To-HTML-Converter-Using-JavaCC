@@ -4,7 +4,6 @@ STATIC = false ;
 }
 
 PARSER_BEGIN(Converter)
-
 public class Converter {
    public static void main(String arg[]) throws java.text.ParseException{
 
@@ -20,8 +19,6 @@ public class Converter {
 
                      }
 }
-
-
 
 PARSER_END(Converter)
 
@@ -59,7 +56,9 @@ TOKEN[IGNORE_CASE] : {
 
 void Create():
 { String res="";}{
-    <ADD> res=element() { System.out.println(res);}
+    <ADD> res=element() {
+ System.out.println(res);
+ }
 
 }
 

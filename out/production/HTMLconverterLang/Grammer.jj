@@ -4,12 +4,11 @@ STATIC = false ;
 }
 
 PARSER_BEGIN(Converter)
-
 public class Converter {
    public static void main(String arg[]) throws java.text.ParseException{
 
        while(true){
-               Converter obj=new Converter(System.in);
+               converter obj=new converter(System.in);
                                     try {
                                         obj.Create();
 
@@ -20,8 +19,6 @@ public class Converter {
 
                      }
 }
-
-
 
 PARSER_END(Converter)
 
