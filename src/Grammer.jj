@@ -11,10 +11,9 @@ public class Converter {
                Converter obj=new Converter(System.in);
                                     try {
                                         obj.Create();
-
                                     }catch (ParseException e){
                                         e.printStackTrace();
-                                       }
+                                    }
        }
 
                      }
@@ -69,9 +68,9 @@ String element():
     (details = img() {
                 return "<img src="+details+" />"; }
     |details = para()   {
-                 return "<p" + details + "/p>"   ;}
+                 return "<p " + details + "/p>"   ;}
     |details = header() {
-            return "<h1" + details + "/h1>";}
+            return "<h1 " + details + "/h1>";}
     | details = link() {
             return "<a "+details+"/a>";})
     <EOL>
@@ -85,7 +84,6 @@ String res="";
     }
 {
     <LINK>  text=decoratedURL() {
-                                   // System.out.println(text);
                                     res=text;
                                    if(text.contains("<<text>>")){
                                            arr=text.split("<<text>>");
@@ -96,7 +94,7 @@ String res="";
 
                                    if(res.contains("<<href=>>")){
                                        arr=res.split("<<href=>>");
-                                       res= "href=\""+arr[1]+"\"" + " " +arr[0]+arr[2];
+                                       res= " href=\""+arr[1]+"\"" + " " +arr[0]+arr[2];
                               }
                                    return res;
           }
@@ -117,7 +115,7 @@ String[] arr;
                                               //  System.out.println(text);
                                                  if(text.contains("<<text>>")){
                                                          arr=text.split("<<text>>");
-                                                         return " " + arr[0] + ">" + arr[1] + "<" ;
+                                                         return  arr[0] + ">" + arr[1] + "<" ;
                                                      }else{
                                                          return text+"><";
                                                      }
@@ -132,7 +130,7 @@ String header():
 
                     if(text.contains("<<text>>")){
                             arr=text.split("<<text>>");
-                            return " " + arr[0] + ">" + arr[1] + "<" ;
+                            return  arr[0] + ">" + arr[1] + "<" ;
                         }else{
                             return text+"><";
                         }
@@ -172,18 +170,18 @@ String decoratedURL():
                            if(temp.contains("style=") && temp2.contains("style=")) {
                                arr=temp.split("style=\"");
                                arr2=temp2.split("style=\"");
-                               style= "style=\"" + arr[1].split("\"")[0]+ " " +arr2[1].split("\"")[0];
+                               style= " style=\"" + arr[1].split("\"")[0]+ " " +arr2[1].split("\"")[0] + "\"" ;
                                res = style;
                            }else if(temp.contains("style=") || temp2.contains("style=")){
                                style=(temp.contains("style=")?temp+temp2:temp2+temp);
-                               res = style;
+                               res = " "+style;
                            }else if(temp.contains("<<href=>>") || temp2.contains("<<href=>>")){
                                arr = temp.split("<<href=>>");
                                arr2=temp2.split("<<href=>>");
                                style=(temp.contains("<<href=>>")?
                                "<<href=>>"+temp.split("<<href=>>")[1]+"<<href=>> " + temp2:
                                "<<href=>>"+temp2.split("<<href=>>")[1]+"<<href=>> " + temp);
-                               res = style;
+                               res = " "+style;
                            }else {
                                //both are texts
                                arr = temp.split("<<text>>");
@@ -215,11 +213,11 @@ System.out.println("temp2"+temp2);
                                         if(temp.contains("style=") && temp2.contains("style=")) {
                                             arr=temp.split("style=\"");
                                             arr2=temp2.split("style=\"");
-                                            style= "style=\"" + arr[1].split("\"")[0]+ " " +arr2[1].split("\"")[0];
+                                            style= " style=\"" + arr[1].split("\"")[0]+ " " +arr2[1].split("\"")[0] +"\"";
                                             res = style;
                                         } else if(temp.contains("style=") || temp2.contains("style=")){
                                             style=(temp.contains("style=")?temp+temp2:temp2+temp);
-                                            res = style;
+                                            res = " " + style;
                                         }else {
                                             //both are texts
                                             arr = temp.split("<<text>>");
@@ -243,8 +241,8 @@ String minimalDecoratedTxt():
 String minimalDecoratedURL():
 {String temp="";}{
      temp = text(){return "<<text>>"+temp ;}
-    |temp =font(){return "style=\"" + temp + "\"";}
-    |temp=color(){return "style=\"" + temp + "\"";}
+    |temp =font(){return " style=\"" + temp + "\"";}
+    |temp=color(){return " style=\"" + temp + "\"";}
     |temp=url() {return "<<href=>>" + temp + "<<href=>>";}
 }
 
@@ -262,13 +260,13 @@ String text():
 String color():
 {    String c;}
 {
-    <WITHCOLOR>  <QUOTE> c=sentence() { return "color:" +c + ";"; }
+    <WITHCOLOR>  <QUOTE> c=sentence() { return " color:" +c + ";"; }
 }
 
 String font():
 {    String f; }
 {
-    <WITHFONT>  <QUOTE> f=sentence(){ return "font-family:"+f+";";}
+    <WITHFONT>  <QUOTE> f=sentence(){ return " font-family:"+f+";";}
 }
 
 String url():
