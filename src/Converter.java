@@ -8,33 +8,54 @@ import java.nio.charset.Charset;
 public class Converter implements ConverterConstants {
 
    public static void main(String arg[]) throws java.text.ParseException{
+
        try{
+           String res="";
             File f = new File("input.txt");
             Scanner reader = new Scanner(f);
             while (reader.hasNextLine()) {
                 String data = reader.nextLine();
-                tony(data);
+                if(Converter.validate(data)){
+                   res= Converter.parse(data);
+                   System.out.println(res);
+                }else{
+                    System.out.println(false);
+                }
             }
        }catch (Exception e){}
-
              }
-             static void tony (String input) throws Exception{
+             static boolean validate (String input) throws Exception{
+                String result="";
+                InputStream inputStream = new ByteArrayInputStream(input.getBytes(Charset.forName("UTF-8")));
+                Converter obj=new Converter(inputStream);
+                try {
+                    result = obj.Create();
+                    return true;
+                }catch (ParseException e){
 
-                                      // System.out.println(data);
-                                   InputStream inputStream = new ByteArrayInputStream(input.getBytes(Charset.forName("UTF-8")));
-                                  // System.out.println(inputStream);
-                                   Converter obj=new Converter(inputStream);
-                                   try {
-                                       obj.Create();
-                                   }catch (ParseException e){
-                                       e.printStackTrace();
-                                   }
+                }
+                return false;
     }
 
-  final public void Create() throws ParseException {String res="";
+    static String parse (String input) throws Exception{
+                    String result="";
+                    InputStream inputStream = new ByteArrayInputStream(input.getBytes(Charset.forName("UTF-8")));
+                    Converter obj=new Converter(inputStream);
+                    try {
+                        result = obj.Create();
+                        return result;
+                    }catch (ParseException e){
+
+                    }
+                    return result;
+        }
+
+  final public String Create() throws ParseException {String res="";
     jj_consume_token(ADD);
     res = element();
-System.out.println(res);
+//System.out.println(res);
+ {if ("" != null) return res;}
+    throw new Error("Missing return statement in function");
 }
 
   final public String element() throws ParseException {String tag="";
@@ -42,7 +63,7 @@ System.out.println(res);
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case IMAGE:{
       details = img();
-{if ("" != null) return "<img src="+details+" />";}
+{if ("" != null) return "<img src=\""+details+"\" />";}
       break;
       }
     case PARA:{
@@ -204,12 +225,26 @@ System.out.println("temp1"+temp);
                            }
       break;
       }
+    case 0:
     case EOL:{
-      jj_consume_token(EOL);
+      switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+      case EOL:{
+        jj_consume_token(EOL);
+        break;
+        }
+      case 0:{
+        jj_consume_token(0);
+        break;
+        }
+      default:
+        jj_la1[4] = jj_gen;
+        jj_consume_token(-1);
+        throw new ParseException();
+      }
       break;
       }
     default:
-      jj_la1[4] = jj_gen;
+      jj_la1[5] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -247,12 +282,26 @@ System.out.println("temp2"+temp2);
                                         }
       break;
       }
+    case 0:
     case EOL:{
-      jj_consume_token(EOL);
+      switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+      case EOL:{
+        jj_consume_token(EOL);
+        break;
+        }
+      case 0:{
+        jj_consume_token(0);
+        break;
+        }
+      default:
+        jj_la1[6] = jj_gen;
+        jj_consume_token(-1);
+        throw new ParseException();
+      }
       break;
       }
     default:
-      jj_la1[5] = jj_gen;
+      jj_la1[7] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -279,7 +328,7 @@ System.out.println(res);
       break;
       }
     default:
-      jj_la1[6] = jj_gen;
+      jj_la1[8] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -309,7 +358,7 @@ System.out.println(res);
       break;
       }
     default:
-      jj_la1[7] = jj_gen;
+      jj_la1[9] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -358,13 +407,13 @@ System.out.println(res);
   public Token jj_nt;
   private int jj_ntk;
   private int jj_gen;
-  final private int[] jj_la1 = new int[8];
+  final private int[] jj_la1 = new int[10];
   static private int[] jj_la1_0;
   static {
 	   jj_la1_init_0();
 	}
 	private static void jj_la1_init_0() {
-	   jj_la1_0 = new int[] {0xf0000,0x800001,0x10,0x20,0xc00000,0xc00000,0x1a00,0x1b00,};
+	   jj_la1_0 = new int[] {0xf0000,0x800001,0x10,0x20,0x800001,0xc00001,0x800001,0xc00001,0x1a00,0x1b00,};
 	}
 
   /** Constructor with InputStream. */
@@ -378,7 +427,7 @@ System.out.println(res);
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 8; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < 10; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -392,7 +441,7 @@ System.out.println(res);
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 8; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < 10; i++) jj_la1[i] = -1;
   }
 
   /** Constructor. */
@@ -402,7 +451,7 @@ System.out.println(res);
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 8; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < 10; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -420,7 +469,7 @@ System.out.println(res);
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 8; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < 10; i++) jj_la1[i] = -1;
   }
 
   /** Constructor with generated Token Manager. */
@@ -429,7 +478,7 @@ System.out.println(res);
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 8; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < 10; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -438,7 +487,7 @@ System.out.println(res);
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 8; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < 10; i++) jj_la1[i] = -1;
   }
 
   private Token jj_consume_token(int kind) throws ParseException {
@@ -494,7 +543,7 @@ System.out.println(res);
 	   la1tokens[jj_kind] = true;
 	   jj_kind = -1;
 	 }
-	 for (int i = 0; i < 8; i++) {
+	 for (int i = 0; i < 10; i++) {
 	   if (jj_la1[i] == jj_gen) {
 		 for (int j = 0; j < 32; j++) {
 		   if ((jj_la1_0[i] & (1<<j)) != 0) {

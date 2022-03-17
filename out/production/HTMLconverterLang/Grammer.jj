@@ -13,28 +13,48 @@ import java.nio.charset.Charset;
 public class Converter {
 
    public static void main(String arg[]) throws java.text.ParseException{
+
        try{
+           String res="";
             File f = new File("input.txt");
             Scanner reader = new Scanner(f);
             while (reader.hasNextLine()) {
                 String data = reader.nextLine();
-                tony(data);
+                if(Converter.validate(data)){
+                   res= Converter.parse(data);
+                   System.out.println(res);
+                }else{
+                    System.out.println(false);
+                }
             }
        }catch (Exception e){}
-
              }
-             static void tony (String input) throws Exception{
+             static boolean validate (String input) throws Exception{
+                String result="";
+                InputStream inputStream = new ByteArrayInputStream(input.getBytes(Charset.forName("UTF-8")));
+                Converter obj=new Converter(inputStream);
+                try {
+                    result = obj.Create();
+                    return true;
+                }catch (ParseException e){
 
-                                      // System.out.println(data);
-                                   InputStream inputStream = new ByteArrayInputStream(input.getBytes(Charset.forName("UTF-8")));
-                                  // System.out.println(inputStream);
-                                   Converter obj=new Converter(inputStream);
-                                   try {
-                                       obj.Create();
-                                   }catch (ParseException e){
-                                       e.printStackTrace();
-                                   }
+                }
+                return false;
     }
+
+    static String parse (String input) throws Exception{
+                    String result="";
+                    InputStream inputStream = new ByteArrayInputStream(input.getBytes(Charset.forName("UTF-8")));
+                    Converter obj=new Converter(inputStream);
+                    try {
+                        result = obj.Create();
+                        return result;
+                    }catch (ParseException e){
+
+                    }
+                    return result;
+        }
+
  }
 
 
@@ -75,10 +95,11 @@ TOKEN[IGNORE_CASE] : {
 }
 
 
-void Create():
+String Create():
 { String res="";}{
     <ADD> res=element() {
- System.out.println(res);
+ //System.out.println(res);
+ return res;
  }
 
 }
@@ -88,7 +109,7 @@ String element():
   String details="";}
 {
     (details = img() {
-                return "<img src="+details+" />"; }
+                return "<img src=\""+details+"\" />"; }
     |details = para()   {
                  return "<p " + details + "/p>"   ;}
     |details = header() {
@@ -210,7 +231,7 @@ String decoratedURL():
                                res= temp2 + arr[1] ;
                            }
                                        }
-                                       )|<EOL>
+                                       )|(<EOL> | <EOF>)
                                ){ System.out.println(res);
                             return res;}
 }
@@ -246,7 +267,7 @@ System.out.println("temp2"+temp2);
                                             res= temp2 + arr[1] ;
                                         }
             }
-            )|<EOL>
+            )|(<EOL> | <EOF>)
     ){ System.out.println(res);
  return res;}
 }

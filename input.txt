@@ -1,4 +1,3 @@
 ADD IMAGE WITH SOURCE "https://www.w3schools.com/html/pic_trulli.jpg"
 ADD HEADING WITH TEXT "Hello World"
 ADD PARAGRAPH WITH TEXT "Welcome" AND WITH FONT "Arial" AND WITH COLOR "Red"
-
