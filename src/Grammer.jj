@@ -28,18 +28,18 @@ public class Converter {
                 }
             }
        }catch (Exception e){}
-             }
-             static boolean validate (String input) throws Exception{
-                String result="";
-                InputStream inputStream = new ByteArrayInputStream(input.getBytes(Charset.forName("UTF-8")));
-                Converter obj=new Converter(inputStream);
-                try {
-                    result = obj.Create();
-                    return true;
-                }catch (ParseException e){
+   }
+     static boolean validate (String input) throws Exception{
+        String result="";
+        InputStream inputStream = new ByteArrayInputStream(input.getBytes(Charset.forName("UTF-8")));
+        Converter obj=new Converter(inputStream);
+        try {
+            result = obj.Create();
+            return true;
+        }catch (ParseException e){
 
-                }
-                return false;
+        }
+        return false;
     }
 
     static String parse (String input) throws Exception{
@@ -64,14 +64,15 @@ public class Converter {
 PARSER_END(Converter)
 
 SKIP :
-{ " "
- |"\r"
+{
+ "\r"
 | "\t"
 
 }
 
-TOKEN[IGNORE_CASE] : {
-  < ALPHANUMERIC : ["0"-"9"] | ["a"-"z"]| ["A"-"Z"] | "/" | ":" | "." | "_"  >
+
+TOKEN[IGNORE_CASE ] : {
+  <ALPHANUMERIC : ["0"-"9"] | ["a"-"z"]| ["A"-"Z"] | "/" | ":" | "." | "_" >
   |<QUOTE: "\"">
   |<ADD : "add">
   |<#WITH: "with">
@@ -79,7 +80,7 @@ TOKEN[IGNORE_CASE] : {
   |<WITHTEXT: <WITH> " text">
   |<WITHSOURCE: <WITH> " source">
   |<WITHCOLOR: <WITH> " color">
-  |<WITHFONT: <WITH> " font">
+  |<WITHFONT:  <WITH>  " font">
   |<TEXT: "text">
   |<COLOR:"color">
   |<FONT:"font">
@@ -88,20 +89,18 @@ TOKEN[IGNORE_CASE] : {
   |<HEAD:"heading">
   |<IMAGE:"image">
   |<SOURCE:"source">
-  |<NULL:"">
   |<AND:"and">
   |<EOL:"\n">
-  |<SPC:" ">
+  |<SPC: " ">
 
 }
 
 
 String Create():
 { String res="";}{
-    <ADD> (<SPC>)* res=element() {
- //System.out.println(res);
- return res;
- }
+    <ADD>
+    (<SPC>)*
+    res=element() {return res;}
 
 }
 
@@ -117,6 +116,7 @@ String element():
             return "<h1" + details + "/h1>";}
     | details = link() {
             return "<a "+details+"/a>";})
+    (<SPC>)*
     (<EOL> | <EOF>)
 
 }
@@ -127,7 +127,9 @@ String[] arr;
 String res="";
     }
 {
-    <LINK>(<SPC>)*  text=decoratedURL() {
+    <LINK>
+    (<SPC>)*
+text=decoratedURL() {
                                     res=text;
                                    if(text.contains("<<text>>")){
                                            arr=text.split("<<text>>");
@@ -147,7 +149,7 @@ String res="";
 String img():
 { String l;}
 {
-    <IMAGE> (<SPC>)*<WITHSOURCE>(<SPC>)*<QUOTE> l=sentence(){ return l;}
+    <IMAGE>(<SPC>)*<WITHSOURCE>(<SPC>)*<QUOTE> l=sentence(){ return l;}
 }
 
 String para():
@@ -155,7 +157,9 @@ String para():
 String[] arr;
     }
 {
-    <PARA>(<SPC>)*text=decoratedTxt() {
+    <PARA>
+    (<SPC>)*
+    text=decoratedTxt() {
                                               //  System.out.println(text);
                                                  if(text.contains("<<text>>")){
                                                          arr=text.split("<<text>>");
@@ -170,7 +174,9 @@ String header():
 {String text;
     String[] arr;}
 {
-    <HEAD>(<SPC>)*text=decoratedTxt(){
+    <HEAD>
+    (<SPC>)*
+    text=decoratedTxt(){
 
                     if(text.contains("<<text>>")){
                             arr=text.split("<<text>>");
@@ -190,7 +196,7 @@ String sentence():
     String rs=null;
  }
 {
-    t= <ALPHANUMERIC>(<SPC>)* [rs = sentence()] {
+    (t=<ALPHANUMERIC>|t=<SPC>) [rs = sentence()] {
                                           if (rs !=null)
                                               s = t.image + rs;
                                           else s=t.image;}
@@ -207,10 +213,10 @@ String decoratedURL():
   String style;
 }
 {
-    temp=minimalDecoratedURL() {res= temp;} (
-                    ((<SPC>)*<AND> (<SPC>)*temp2=decoratedURL()  {
-//                           System.out.println("temp1"+temp);
-//                           System.out.println("temp2"+temp2);
+    temp=minimalDecoratedURL() {res= temp;}
+    (<SPC>)*
+    (
+                    (<AND> (<SPC>)* temp2=decoratedURL()  {
                            if(temp.contains("style=") && temp2.contains("style=")) {
                                arr=temp.split("style=\"");
                                arr2=temp2.split("style=\"");
@@ -253,9 +259,8 @@ String decoratedTxt():
 {
     temp=minimalDecoratedTxt() {res= temp;}
     (
-       ( (<SPC>)*<AND>(<SPC>)* temp2=decoratedTxt()  {
-//System.out.println("temp1"+temp);
-//System.out.println("temp2"+temp2);
+    (<SPC>)*
+       ( <AND> (<SPC>)* temp2=decoratedTxt()  {
                                         if(temp.contains("style=") && temp2.contains("style=")) {
                                             arr=temp.split("style=\"");
                                             arr2=temp2.split("style=\"");
@@ -298,25 +303,24 @@ String minimalDecoratedURL():
 String text():
 { String t;}
 {
-    <WITHTEXT>(<SPC>)* <QUOTE> t=sentence(){
-           // System.out.println(t);
+    <WITHTEXT> (<SPC>)* <QUOTE> t=sentence(){
             return t;}
 }
 
 String color():
 {    String c;}
 {
-    <WITHCOLOR>(<SPC>)*  <QUOTE> c=sentence() { return "color:" +c + ";"; }
+    <WITHCOLOR>(<SPC>)* <QUOTE> c=sentence() { return "color:" +c + ";"; }
 }
 
 String font():
 {    String f; }
 {
-    <WITHFONT>(<SPC>)*  <QUOTE> f=sentence(){ return "font-family:"+f+";";}
+    <WITHFONT> (<SPC>)* <QUOTE> f=sentence(){ return "font-family:"+f+";";}
 }
 
 String url():
 {    String l;}
 {
-    <WITHLINK>(<SPC>)* <QUOTE> l=sentence() {return l;}
+    <WITHLINK> (<SPC>)* <QUOTE> l=sentence() {return l;}
 }

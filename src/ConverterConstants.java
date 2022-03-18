@@ -9,47 +9,45 @@ public interface ConverterConstants {
   /** End of File. */
   int EOF = 0;
   /** RegularExpression Id. */
-  int ALPHANUMERIC = 4;
+  int ALPHANUMERIC = 3;
   /** RegularExpression Id. */
-  int QUOTE = 5;
+  int QUOTE = 4;
   /** RegularExpression Id. */
-  int ADD = 6;
+  int ADD = 5;
   /** RegularExpression Id. */
-  int WITH = 7;
+  int WITH = 6;
   /** RegularExpression Id. */
-  int WITHLINK = 8;
+  int WITHLINK = 7;
   /** RegularExpression Id. */
-  int WITHTEXT = 9;
+  int WITHTEXT = 8;
   /** RegularExpression Id. */
-  int WITHSOURCE = 10;
+  int WITHSOURCE = 9;
   /** RegularExpression Id. */
-  int WITHCOLOR = 11;
+  int WITHCOLOR = 10;
   /** RegularExpression Id. */
-  int WITHFONT = 12;
+  int WITHFONT = 11;
   /** RegularExpression Id. */
-  int TEXT = 13;
+  int TEXT = 12;
   /** RegularExpression Id. */
-  int COLOR = 14;
+  int COLOR = 13;
   /** RegularExpression Id. */
-  int FONT = 15;
+  int FONT = 14;
   /** RegularExpression Id. */
-  int LINK = 16;
+  int LINK = 15;
   /** RegularExpression Id. */
-  int PARA = 17;
+  int PARA = 16;
   /** RegularExpression Id. */
-  int HEAD = 18;
+  int HEAD = 17;
   /** RegularExpression Id. */
-  int IMAGE = 19;
+  int IMAGE = 18;
   /** RegularExpression Id. */
-  int SOURCE = 20;
+  int SOURCE = 19;
   /** RegularExpression Id. */
-  int NULL = 21;
+  int AND = 20;
   /** RegularExpression Id. */
-  int AND = 22;
+  int EOL = 21;
   /** RegularExpression Id. */
-  int EOL = 23;
-  /** RegularExpression Id. */
-  int SPC = 24;
+  int SPC = 22;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -57,7 +55,6 @@ public interface ConverterConstants {
   /** Literal token values. */
   String[] tokenImage = {
     "<EOF>",
-    "\" \"",
     "\"\\r\"",
     "\"\\t\"",
     "<ALPHANUMERIC>",
@@ -77,7 +74,6 @@ public interface ConverterConstants {
     "\"heading\"",
     "\"image\"",
     "\"source\"",
-    "\"\"",
     "\"and\"",
     "\"\\n\"",
     "\" \"",

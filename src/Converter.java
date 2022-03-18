@@ -23,18 +23,18 @@ public class Converter implements ConverterConstants {
                 }
             }
        }catch (Exception e){}
-             }
-             static boolean validate (String input) throws Exception{
-                String result="";
-                InputStream inputStream = new ByteArrayInputStream(input.getBytes(Charset.forName("UTF-8")));
-                Converter obj=new Converter(inputStream);
-                try {
-                    result = obj.Create();
-                    return true;
-                }catch (ParseException e){
+   }
+     static boolean validate (String input) throws Exception{
+        String result="";
+        InputStream inputStream = new ByteArrayInputStream(input.getBytes(Charset.forName("UTF-8")));
+        Converter obj=new Converter(inputStream);
+        try {
+            result = obj.Create();
+            return true;
+        }catch (ParseException e){
 
-                }
-                return false;
+        }
+        return false;
     }
 
     static String parse (String input) throws Exception{
@@ -66,8 +66,7 @@ public class Converter implements ConverterConstants {
       jj_consume_token(SPC);
     }
     res = element();
-//System.out.println(res);
- {if ("" != null) return res;}
+{if ("" != null) return res;}
     throw new Error("Missing return statement in function");
 }
 
@@ -99,6 +98,19 @@ public class Converter implements ConverterConstants {
       jj_consume_token(-1);
       throw new ParseException();
     }
+    label_2:
+    while (true) {
+      switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+      case SPC:{
+        ;
+        break;
+        }
+      default:
+        jj_la1[2] = jj_gen;
+        break label_2;
+      }
+      jj_consume_token(SPC);
+    }
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case EOL:{
       jj_consume_token(EOL);
@@ -109,7 +121,7 @@ public class Converter implements ConverterConstants {
       break;
       }
     default:
-      jj_la1[2] = jj_gen;
+      jj_la1[3] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -120,7 +132,7 @@ public class Converter implements ConverterConstants {
 String[] arr;
 String res="";
     jj_consume_token(LINK);
-    label_2:
+    label_3:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
       case SPC:{
@@ -128,8 +140,8 @@ String res="";
         break;
         }
       default:
-        jj_la1[3] = jj_gen;
-        break label_2;
+        jj_la1[4] = jj_gen;
+        break label_3;
       }
       jj_consume_token(SPC);
     }
@@ -152,20 +164,6 @@ res=text;
 
   final public String img() throws ParseException {String l;
     jj_consume_token(IMAGE);
-    label_3:
-    while (true) {
-      switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-      case SPC:{
-        ;
-        break;
-        }
-      default:
-        jj_la1[4] = jj_gen;
-        break label_3;
-      }
-      jj_consume_token(SPC);
-    }
-    jj_consume_token(WITHSOURCE);
     label_4:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
@@ -179,15 +177,7 @@ res=text;
       }
       jj_consume_token(SPC);
     }
-    jj_consume_token(QUOTE);
-    l = sentence();
-{if ("" != null) return l;}
-    throw new Error("Missing return statement in function");
-}
-
-  final public String para() throws ParseException {String text ;
-String[] arr;
-    jj_consume_token(PARA);
+    jj_consume_token(WITHSOURCE);
     label_5:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
@@ -198,6 +188,28 @@ String[] arr;
       default:
         jj_la1[6] = jj_gen;
         break label_5;
+      }
+      jj_consume_token(SPC);
+    }
+    jj_consume_token(QUOTE);
+    l = sentence();
+{if ("" != null) return l;}
+    throw new Error("Missing return statement in function");
+}
+
+  final public String para() throws ParseException {String text ;
+String[] arr;
+    jj_consume_token(PARA);
+    label_6:
+    while (true) {
+      switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+      case SPC:{
+        ;
+        break;
+        }
+      default:
+        jj_la1[7] = jj_gen;
+        break label_6;
       }
       jj_consume_token(SPC);
     }
@@ -215,7 +227,7 @@ String[] arr;
   final public String header() throws ParseException {String text;
     String[] arr;
     jj_consume_token(HEAD);
-    label_6:
+    label_7:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
       case SPC:{
@@ -223,8 +235,8 @@ String[] arr;
         break;
         }
       default:
-        jj_la1[7] = jj_gen;
-        break label_6;
+        jj_la1[8] = jj_gen;
+        break label_7;
       }
       jj_consume_token(SPC);
     }
@@ -241,27 +253,28 @@ if(text.contains("<<text>>")){
   final public String sentence() throws ParseException {Token t;
     String s="";
     String rs=null;
-    t = jj_consume_token(ALPHANUMERIC);
-    label_7:
-    while (true) {
-      switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-      case SPC:{
-        ;
-        break;
-        }
-      default:
-        jj_la1[8] = jj_gen;
-        break label_7;
-      }
-      jj_consume_token(SPC);
-    }
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case ALPHANUMERIC:{
-      rs = sentence();
+      t = jj_consume_token(ALPHANUMERIC);
+      break;
+      }
+    case SPC:{
+      t = jj_consume_token(SPC);
       break;
       }
     default:
       jj_la1[9] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+    case ALPHANUMERIC:
+    case SPC:{
+      rs = sentence();
+      break;
+      }
+    default:
+      jj_la1[10] = jj_gen;
       ;
     }
 if (rs !=null)
@@ -273,7 +286,7 @@ if (rs !=null)
       break;
       }
     default:
-      jj_la1[10] = jj_gen;
+      jj_la1[11] = jj_gen;
       ;
     }
 {if ("" != null) return s;}
@@ -288,22 +301,21 @@ if (rs !=null)
   String style;
     temp = minimalDecoratedURL();
 res= temp;
-    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-    case AND:
-    case SPC:{
-      label_8:
-      while (true) {
-        switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-        case SPC:{
-          ;
-          break;
-          }
-        default:
-          jj_la1[11] = jj_gen;
-          break label_8;
+    label_8:
+    while (true) {
+      switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+      case SPC:{
+        ;
+        break;
         }
-        jj_consume_token(SPC);
+      default:
+        jj_la1[12] = jj_gen;
+        break label_8;
       }
+      jj_consume_token(SPC);
+    }
+    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+    case AND:{
       jj_consume_token(AND);
       label_9:
       while (true) {
@@ -313,15 +325,13 @@ res= temp;
           break;
           }
         default:
-          jj_la1[12] = jj_gen;
+          jj_la1[13] = jj_gen;
           break label_9;
         }
         jj_consume_token(SPC);
       }
       temp2 = decoratedURL();
-//                           System.out.println("temp1"+temp);
-//                           System.out.println("temp2"+temp2);
-                           if(temp.contains("style=") && temp2.contains("style=")) {
+if(temp.contains("style=") && temp2.contains("style=")) {
                                arr=temp.split("style=\"");
                                arr2=temp2.split("style=\"");
                                style= "style=\"" + arr[1].split("\"")[0]+ " " +arr2[1].split("\"")[0] + "\"" ;
@@ -355,14 +365,14 @@ res= temp;
         break;
         }
       default:
-        jj_la1[13] = jj_gen;
+        jj_la1[14] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
       break;
       }
     default:
-      jj_la1[14] = jj_gen;
+      jj_la1[15] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -390,7 +400,7 @@ res= temp;
           break;
           }
         default:
-          jj_la1[15] = jj_gen;
+          jj_la1[16] = jj_gen;
           break label_10;
         }
         jj_consume_token(SPC);
@@ -404,15 +414,13 @@ res= temp;
           break;
           }
         default:
-          jj_la1[16] = jj_gen;
+          jj_la1[17] = jj_gen;
           break label_11;
         }
         jj_consume_token(SPC);
       }
       temp2 = decoratedTxt();
-//System.out.println("temp1"+temp);
-//System.out.println("temp2"+temp2);
-                                        if(temp.contains("style=") && temp2.contains("style=")) {
+if(temp.contains("style=") && temp2.contains("style=")) {
                                             arr=temp.split("style=\"");
                                             arr2=temp2.split("style=\"");
                                             style= "style=\"" + arr[1].split("\"")[0]+arr2[1].split("\"")[0] +"\"";
@@ -439,14 +447,14 @@ res= temp;
         break;
         }
       default:
-        jj_la1[17] = jj_gen;
+        jj_la1[18] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
       break;
       }
     default:
-      jj_la1[18] = jj_gen;
+      jj_la1[19] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -473,7 +481,7 @@ res= temp;
       break;
       }
     default:
-      jj_la1[19] = jj_gen;
+      jj_la1[20] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -503,7 +511,7 @@ res= temp;
       break;
       }
     default:
-      jj_la1[20] = jj_gen;
+      jj_la1[21] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -520,15 +528,14 @@ res= temp;
         break;
         }
       default:
-        jj_la1[21] = jj_gen;
+        jj_la1[22] = jj_gen;
         break label_12;
       }
       jj_consume_token(SPC);
     }
     jj_consume_token(QUOTE);
     t = sentence();
-// System.out.println(t);
-            {if ("" != null) return t;}
+{if ("" != null) return t;}
     throw new Error("Missing return statement in function");
 }
 
@@ -542,7 +549,7 @@ res= temp;
         break;
         }
       default:
-        jj_la1[22] = jj_gen;
+        jj_la1[23] = jj_gen;
         break label_13;
       }
       jj_consume_token(SPC);
@@ -563,7 +570,7 @@ res= temp;
         break;
         }
       default:
-        jj_la1[23] = jj_gen;
+        jj_la1[24] = jj_gen;
         break label_14;
       }
       jj_consume_token(SPC);
@@ -584,7 +591,7 @@ res= temp;
         break;
         }
       default:
-        jj_la1[24] = jj_gen;
+        jj_la1[25] = jj_gen;
         break label_15;
       }
       jj_consume_token(SPC);
@@ -604,13 +611,13 @@ res= temp;
   public Token jj_nt;
   private int jj_ntk;
   private int jj_gen;
-  final private int[] jj_la1 = new int[25];
+  final private int[] jj_la1 = new int[26];
   static private int[] jj_la1_0;
   static {
 	   jj_la1_init_0();
 	}
 	private static void jj_la1_init_0() {
-	   jj_la1_0 = new int[] {0x1000000,0xf0000,0x800001,0x1000000,0x1000000,0x1000000,0x1000000,0x1000000,0x1000000,0x10,0x20,0x1000000,0x1000000,0x800001,0x1c00001,0x1000000,0x1000000,0x800001,0x1c00001,0x1a00,0x1b00,0x1000000,0x1000000,0x1000000,0x1000000,};
+	   jj_la1_0 = new int[] {0x400000,0x78000,0x400000,0x200001,0x400000,0x400000,0x400000,0x400000,0x400000,0x400008,0x400008,0x10,0x400000,0x400000,0x200001,0x300001,0x400000,0x400000,0x200001,0x700001,0xd00,0xd80,0x400000,0x400000,0x400000,0x400000,};
 	}
 
   /** Constructor with InputStream. */
@@ -624,7 +631,7 @@ res= temp;
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 25; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < 26; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -638,7 +645,7 @@ res= temp;
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 25; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < 26; i++) jj_la1[i] = -1;
   }
 
   /** Constructor. */
@@ -648,7 +655,7 @@ res= temp;
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 25; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < 26; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -666,7 +673,7 @@ res= temp;
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 25; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < 26; i++) jj_la1[i] = -1;
   }
 
   /** Constructor with generated Token Manager. */
@@ -675,7 +682,7 @@ res= temp;
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 25; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < 26; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -684,7 +691,7 @@ res= temp;
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 25; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < 26; i++) jj_la1[i] = -1;
   }
 
   private Token jj_consume_token(int kind) throws ParseException {
@@ -735,12 +742,12 @@ res= temp;
   /** Generate ParseException. */
   public ParseException generateParseException() {
 	 jj_expentries.clear();
-	 boolean[] la1tokens = new boolean[25];
+	 boolean[] la1tokens = new boolean[23];
 	 if (jj_kind >= 0) {
 	   la1tokens[jj_kind] = true;
 	   jj_kind = -1;
 	 }
-	 for (int i = 0; i < 25; i++) {
+	 for (int i = 0; i < 26; i++) {
 	   if (jj_la1[i] == jj_gen) {
 		 for (int j = 0; j < 32; j++) {
 		   if ((jj_la1_0[i] & (1<<j)) != 0) {
@@ -749,7 +756,7 @@ res= temp;
 		 }
 	   }
 	 }
-	 for (int i = 0; i < 25; i++) {
+	 for (int i = 0; i < 23; i++) {
 	   if (la1tokens[i]) {
 		 jj_expentry = new int[1];
 		 jj_expentry[0] = i;
